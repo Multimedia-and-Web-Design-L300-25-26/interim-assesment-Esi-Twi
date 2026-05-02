@@ -5,10 +5,16 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const cryptoRoutes = require('./routes/cryptoRoutes');
 const { errorHandler } = require('./middleware/errorMiddleware');
+const cors = require('cors'); 
 
 const app = express();
 
 connectDB();
+
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 
 app.use(express.json());
 app.use(cookieParser());

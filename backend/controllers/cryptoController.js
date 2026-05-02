@@ -1,5 +1,6 @@
 const Crypto = require('../models/Crypto');
 
+
 exports.getAll = async (req, res) => {
     const data = await Crypto.find();
     res.json(data);
