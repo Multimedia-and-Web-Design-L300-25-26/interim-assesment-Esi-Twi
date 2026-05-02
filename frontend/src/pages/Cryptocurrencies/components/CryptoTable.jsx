@@ -24,26 +24,21 @@ export default function CryptoTable() {
   const [sortBy, setSortBy] = useState("mktCap");
   const [sortDir, setSortDir] = useState("desc");
   const [expanded, setExpanded] = useState(false);
+  const [endpoint, setEndpoint] = useState("http://localhost:3000/api/crypto");
 
   const totalAssets = 18591;
   const totalPages = 1860;
 
-
-  const [cryptoAssets, setCryptoAssets] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-
-
   useEffect(() => {
     const fetchCrypto = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/crypto");
+        setLoading(true);
+
+        const res = await fetch(endpoint);
 
         if (!res.ok) throw new Error("Failed to fetch crypto data");
 
         const data = await res.json();
-
         setCryptoAssets(data);
       } catch (err) {
         setError(err.message);
@@ -53,7 +48,74 @@ export default function CryptoTable() {
     };
 
     fetchCrypto();
-  }, []);
+  }, [endpoint]);
+
+  const [cryptoAssets, setCryptoAssets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+
+  const [formData, setFormData] = useState({
+    name: "",
+    symbol: "",
+    price: "",
+    icon: "",
+    change: ""
+  });
+
+  const [showForm, setShowForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleAddCrypto = async () => {
+    try {
+      setSubmitting(true);
+
+      const res = await fetch("http://localhost:3000/api/crypto", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          symbol: formData.symbol,
+          price: Number(formData.price),
+          icon: formData.icon,
+          change: Number(formData.change)
+        })
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to add cryptocurrency");
+      }
+
+      const data = await res.json();
+
+      // refresh table after success
+      setCryptoAssets((prev) => [data, ...prev]);
+
+      setFormData({
+        name: "",
+        symbol: "",
+        price: "",
+        icon: "",
+        change: ""
+      });
+
+      setShowForm(false);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
 
   if (loading) {
     return <p className="text-white">Loading crypto...</p>;
@@ -91,10 +153,85 @@ export default function CryptoTable() {
       </p>
       <button
         onClick={() => setExpanded(!expanded)}
-        className="text-[14px] font-medium text-blue-600 hover:underline mb-7"
+        className="text-[14px] font-medium text-blue-600 hover:underline mb-2"
       >
         {expanded ? "Read less" : "Read more"}
       </button>
+
+
+      <button
+        onClick={() => setShowForm(true)}
+        className="block px-5  mb-5 py-2 text-[13px] font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition"
+      >
+        Add New
+      </button>
+
+      {showForm && (
+        <div className="mb-6 p-4 border rounded-lg bg-white">
+          <div className="grid grid-cols-2 gap-3">
+
+            <input
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            />
+
+            <input
+              name="symbol"
+              placeholder="Symbol"
+              value={formData.symbol}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            />
+
+            <input
+              name="price"
+              placeholder="Price"
+              type="number"
+              value={formData.price}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            />
+
+            <input
+              name="change"
+              placeholder="24h Change (%)"
+              type="number"
+              value={formData.change}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            />
+
+            <input
+              name="icon"
+              placeholder="Image URL"
+              value={formData.icon}
+              onChange={handleChange}
+              className="border p-2 rounded col-span-2"
+            />
+          </div>
+
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={handleAddCrypto}
+              disabled={submitting}
+              className="px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
+            >
+              {submitting ? "Adding..." : "Save"}
+            </button>
+
+            <button
+              onClick={() => setShowForm(false)}
+              className="px-4 py-2 bg-gray-300 rounded cursor-pointer"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+    
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2.5 mb-7">
@@ -213,6 +350,14 @@ export default function CryptoTable() {
             <path d="M6 9l6 6 6-6" />
           </svg>
         </div>
+
+
+        <button
+          onClick={() => setEndpoint("http://localhost:3000/api/crypto/new")}
+          className="block px-5 mb-5 py-2 text-[13px] font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition cursor-pointer"
+        >
+          New Listings
+        </button>
       </div>
 
       {/* Table */}
@@ -237,7 +382,10 @@ export default function CryptoTable() {
                 Chart
               </th>
               <th className="py-3 px-3 font-medium text-[13px]">
-                <button className="flex items-center gap-1 hover:text-gray-900">
+                <button
+                  onClick={() => setEndpoint("http://localhost:3000/api/crypto/gainers")}
+                  className="flex items-center cursor-pointer gap-1 hover:text-gray-900"
+                >
                   Change
                   <SortIcon />
                 </button>

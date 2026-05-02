@@ -7,7 +7,7 @@ exports.getAll = async (req, res) => {
 };
 
 exports.getGainers = async (req, res) => {
-    const data = await Crypto.find().sort({ change24h: -1 });
+    const data = await Crypto.find().sort({ change: -1 });
     res.json(data);
 };
 

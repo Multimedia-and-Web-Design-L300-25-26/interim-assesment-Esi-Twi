@@ -5,6 +5,7 @@ import MarketStats from "./components/MarketStats";
 import CryptoTable from "./components/CryptoTable";
 import Sidebar from "./components/Sidebar";
 import CtaBanner from "./components/CtaBanner";
+import Footer from "../Home/components/Footer";
 
 export default function Cryptocurrencies() {
   return (
@@ -26,6 +27,9 @@ export default function Cryptocurrencies() {
           </div>
         </div>
       </main>
+
+      <Footer />
+
     </div>
   );
 }
