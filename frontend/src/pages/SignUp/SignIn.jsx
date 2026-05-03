@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Key } from "lucide-react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -31,7 +32,7 @@ export default function SignIn() {
       setLoading(true);
       setError("");
 
-      const res = await fetch("http://localhost:3000/api/auth/login", {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

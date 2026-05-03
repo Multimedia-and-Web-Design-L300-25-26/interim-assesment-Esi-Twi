@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const filterOptions = [
@@ -24,7 +24,7 @@ export default function CryptoTable() {
   const [sortBy, setSortBy] = useState("mktCap");
   const [sortDir, setSortDir] = useState("desc");
   const [expanded, setExpanded] = useState(false);
-  const [endpoint, setEndpoint] = useState("http://localhost:3000/api/crypto");
+  const [endpoint, setEndpoint] = useState(`${API_URL}/api/crypto`);
 
   const totalAssets = 18591;
   const totalPages = 1860;
@@ -77,7 +77,7 @@ export default function CryptoTable() {
     try {
       setSubmitting(true);
 
-      const res = await fetch("http://localhost:3000/api/crypto", {
+      const res = await fetch(`${API_URL}/api/crypto`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -353,7 +353,7 @@ export default function CryptoTable() {
 
 
         <button
-          onClick={() => setEndpoint("http://localhost:3000/api/crypto/new")}
+          onClick={() => setEndpoint(`${API_URL}/api/crypto/new`)}
           className="block px-5 mb-5 py-2 text-[13px] font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition cursor-pointer"
         >
           New Listings
@@ -383,7 +383,7 @@ export default function CryptoTable() {
               </th>
               <th className="py-3 px-3 font-medium text-[13px]">
                 <button
-                  onClick={() => setEndpoint("http://localhost:3000/api/crypto/gainers")}
+                  onClick={() => setEndpoint(`${API_URL}/api/crypto/gainers`)}
                   className="flex items-center cursor-pointer gap-1 hover:text-gray-900"
                 >
                   Change
