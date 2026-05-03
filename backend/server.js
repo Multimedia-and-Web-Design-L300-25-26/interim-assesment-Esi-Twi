@@ -12,7 +12,7 @@ const app = express();
 connectDB();
 
 app.use(cors({
-    origin: 'https://crypto-student-esi-twi.onrender.com/',
+    origin: 'https://crypto-student-esi-twi.onrender.com',
     credentials: true
 }));
 
