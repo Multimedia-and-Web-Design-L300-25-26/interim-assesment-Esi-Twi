@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import IndividualsMenu from "../../Individuals/components/IndividualsMenu";
 import BusinessesMenu from "../../Businesses/components/BusinessesMenu";
 import WarningBanner from "../components/WarningBanner"
+import {UserCircle2} from "lucide-react";
 
 const navLinks = [
   { label: "Cryptocurrencies", to: "/cryptocurrencies" },
@@ -124,6 +125,16 @@ export default function Navbar() {
             >
               Sign up
             </Link>
+
+            {/* profile */}
+           
+            <Link to="/profile"
+              className="hidden sm:flex items-center justify-center w-10 h-10 text-gray-600 hover:text-gray-900 transition"
+              aria-label="Search"
+            >
+              <UserCircle2 />
+            </Link>
+
 
             {/* Mobile hamburger */}
             <button
