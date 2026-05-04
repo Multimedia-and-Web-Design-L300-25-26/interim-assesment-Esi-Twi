@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function ProtectedRoute({ children }) {
     const [loading, setLoading] = useState(true);
@@ -8,7 +9,7 @@ export default function ProtectedRoute({ children }) {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const res = await fetch(`${VITE_API_URL}/api/auth/profile`, {
+                const res = await fetch(`${API_URL}/api/auth/profile`, {
                     method: "GET",
                     credentials: "include" 
                 });
