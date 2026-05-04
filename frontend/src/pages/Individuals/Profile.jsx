@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { Mail, User, Calendar, LogOut, Settings } from 'lucide-react';
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 export const Profile = () => {
     const [user, setUser] = useState(null);
@@ -14,7 +16,7 @@ export const Profile = () => {
         const fetchProfile = async () => {
             try {
                 setLoading(true);
-                const res = await fetch(`${VITE_API_URL}/api/auth/profile`, {
+                const res = await fetch(`${API_URL}/api/auth/profile`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
