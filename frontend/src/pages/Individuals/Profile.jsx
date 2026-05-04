@@ -14,7 +14,7 @@ export const Profile = () => {
         const fetchProfile = async () => {
             try {
                 setLoading(true);
-                const res = await fetch('http://localhost:3000/api/auth/profile', {
+                const res = await fetch(`${VITE_API_URL}/api/auth/profile`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
