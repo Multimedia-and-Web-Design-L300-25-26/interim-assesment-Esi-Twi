@@ -8,7 +8,7 @@ export default function ProtectedRoute({ children }) {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const res = await fetch("http://localhost:3000/api/auth/profile", {
+                const res = await fetch(`${VITE_API_URL}/api/auth/profile`, {
                     method: "GET",
                     credentials: "include" 
                 });
